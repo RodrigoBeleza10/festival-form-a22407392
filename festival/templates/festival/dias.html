@@ -4,7 +4,9 @@
     
 {% for dia in dias %}
 
-<h2 style="padding:20px; background:{{dia.cor}}; color:black;">{{ dia.data|date:"d M'y" }}</h2>
+    {% cycle '#00FFFF' '#32CD32' as cor_dia %}
+
+    <h2 style="padding:20px; background:{{cor_dia}}; color:black;">{{ dia.data|date:"d M'y" }}</h2>
 
     {% for concerto in dia.concertos.all %}
         <article class="card">
@@ -14,7 +16,4 @@
 
 {% endfor %}
 
-
-
 {% endblock %}
-    

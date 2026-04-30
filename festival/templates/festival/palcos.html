@@ -2,24 +2,31 @@
 
 {% block content %}
     
-
-{% for palco in palcos %}
-<div style="display: flex; align-items: center; gap: 12px;">
-    <h2>{{ palco.nome }}</h2>
-    <a href="" class="btn">Editar palco</a>
-</div>
-
-    {% if palco.imagem %}
-        <p><img src="{{ palco.imagem.url }}" alt="Imagem do palco {{ palco.nome }}" style="max-width: 320px; width: 100%; border-radius: 8px; border: 1px solid #2b3a55;"></p>
-    {% endif %}
-
-    {% for concerto in palco.concertos.all %}
+    {% for palco in palcos %}
         <article class="card">
-            <a href="{% url 'concerto' concerto.id %}">{{ concerto.banda.nome }} - {{ concerto.dia }}, {{ concerto.hora }}</a>
+            
+            <h2 style="display: flex; align-items: center; gap: 10px;">
+                {{ palco.nome }} ({{ palco.capacidade }} pessoas &middot; {{ palco.concertos.count }} concertos 
+                {% if palco.acessibilidade_mobilidade_reduzida %}
+                    &middot; ♿
+                {% endif %})
+                
+                <a href="{% url 'editar_palco' palco.id %}" class="btn" style="font-size: 0.6em; padding: 5px 10px; background-color: #d84b91;">Editar palco</a>
+            </h2>
+
+            {% if palco.imagem %}
+                <img src="{{ palco.imagem.url }}" alt="{{ palco.nome }}" style="max-width: 300px; border-radius: 8px; margin-bottom: 15px;">
+            {% endif %}
+
+            <div class="lista-concertos">
+                {% for concerto in palco.concertos.all %}
+                    <div style="background-color: #1a202c; padding: 15px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #2d3748;">
+                        {{ concerto.banda.nome }} - {{ concerto.dia.data|date:"Y-m-d" }}, {{ concerto.hora|time:"H:i" }}
+                    </div>
+                {% endfor %}
+            </div>
+
         </article>
     {% endfor %}
 
-{% endfor %}
-
 {% endblock %}
-    
